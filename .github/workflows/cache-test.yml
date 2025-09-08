@@ -1,34 +1,26 @@
 name: Cache Test
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  build:
+  test-cache:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Restore cache
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: test-cache
+          key: ${{ runner.os }}-cache-test
 
-    - name: Cache node modules
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - name: Create dummy file
+        run: |
+          mkdir -p test-cache
+          echo "Prueba de cache" >> test-cache/file.txt
 
-    - name: Install dependencies
-      run: npm install
-
-    - name: Run build
-      run: npm run build || echo "Build step completed"
+      - name: Show cache contents
+        run: ls -R test-cache
 
