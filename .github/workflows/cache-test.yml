@@ -19,7 +19,7 @@ jobs:
       - name: Create dummy file
         run: |
           mkdir -p test-cache
-          echo "Prueba de cache" >> test-cache/file.txt
+          echo "Prueba de cache 2" >> test-cache/file.txt
 
       - name: Show cache contents
         run: ls -R test-cache
